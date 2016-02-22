@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+    <title>Tock</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="tock/tock.js"></script>
+    <style>
+        #laptimes {
+            border: 1px solid #ddd;
+            padding: 10px;
+            width: 200px;
+        }
+    </style>
+    <script src="main/main.js">
+    </script>
+</head>
+
+<body>
+     <section>
+     <h2>TimeSlice</h2><p>
+     		<span>Time Left:</span><input size="8" maxlength="6" id="time_left" placeholder="00:00" value="00:02">
+     		 <span>Slices:</span><span id="timeBoxes">0</span>
+     		<span>Breaks:</span><span id="breaks">0</span>
+     		<br><span>Slice Duration:</span><input size="8" maxlength="6" id="box_duration" value="00:02">
+     		<span>Slice Iterations:</span><input size="8" maxlength="6" id="box_iter" value="4">
+     		<br><span>Short Break Duration:</span><input size="8" maxlength="6" id="break_short" value="00:01">
+     		<span>Long Break Duration:</span><input size="8" maxlength="6" id="break_long" value="00:10">
+     		</p>
+          <p>
+               <button id="start_box">Play/Pause</button>
+               <button id="reset_box">Reset</button>
+          </p>
+          
+
+    
+    </section>
+</body>
+</html>
