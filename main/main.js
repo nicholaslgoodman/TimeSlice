@@ -31,16 +31,10 @@ window.onload = function() {
     	
 	Tock.call(this, options);
 	
-	this.timeLeft = 25;
-	this.sliceCount = 0;
-	this.sliceDuration = $('#box_duration').val();
-	this.shortBreakDuration = $('#break_short').val();
 	this.shortBreakCount = 0;
-	this.longBreakDuration = $('#break_long').val();
 	this.running = false;
 	this.iterations = 4;
-	this.iterationsOriginal = 4;
-	this.onShortBreak = false;
+	this.onShortBreak = true;
 	this.onLongBreak = false;
 	this.alarmAudio = new Audio(audioFile);
 	
@@ -85,16 +79,37 @@ TimeSlice.prototype.reset = function(){
         this.breakCount = 0;
         $('#timeBoxes').text(this.sliceCount);
         $('#breaks').text(this.breakCount);
- };  
+ };
      
 TimeSlice.prototype.playAlarm = function(){
-	this.alarmAudio.play();
+	if ($('#sound_on').val()=="checked"){
+		this.alarmAudio.play();
 	};
+};
 
 TimeSlice.prototype.pauseAlarm = function(){
 	this.alarmAudio.pause();
 	};
+	
+TimeSlice.prototype.work = function(){
+	this.start($('#box_duration').val());
+	this.onShortBreak = true;
+	
+};
 
+TimeSlice.prototype.shortBreak = function(){
+	this.sliceCount++;
+	this.shortBreakCount++;
+	this.start($('#break_short').val());
+	this.onShortBreak = false;
+};
+
+TimeSlice.prototype.longBreak = function(){
+	this.shortBreakCount = 0;
+	this.sliceCount = 0;			
+	this.start($('#break_long').val());
+	this.onLongBreak = false;
+};
 
 TimeSlice.prototype.proceed = function(){
 	/*
@@ -106,28 +121,20 @@ TimeSlice.prototype.proceed = function(){
 			this.onShortBreak = false;
 		}
 		
-		if (this.onShortBreak){			
-			this.breakCount++;
-			MySlice.start($('#break_short').val());
-			this.onShortBreak = false;			
-		}
-		
-		else if (this.onLongBreak){			
-			this.breakCount = 0;
-			this.sliceCount = 0;			
-			MySlice.start($('#break_long').val());
-			this.onLongBreak = false;
-			this.iterations = this.iterationsOriginal;
-		}
-		else {
-			this.sliceCount++;
-			MySlice.start($('#box_duration').val());
-			this.onShortBreak = true;			
-		};       
+	if (this.onShortBreak){
+		this.shortBreak();
+	}
+	else if (this.onLongBreak){
+		this.longBreak();
+	}
+	else{
+		this.work();
+	}
+	
     	
-         $('#timeBoxes').text(this.sliceCount);
-         $('#breaks').text(this.breakCount);
-	   };
+	$('#timeBoxes').text(this.sliceCount);
+    $('#breaks').text(this.shortBreakCount);
+};
    
 var AUDIO_FILE = "media/cuckoo.mp3";
 
