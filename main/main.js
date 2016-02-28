@@ -29,8 +29,7 @@ window.onload = function() {
      * @param options is passed to Tock 
      */
     	
-	Tock.call(this, options);
-	
+	Tock.call(this, options);	
 	this.sliceCount = 0;
 	this.shortBreakCount = 0;
 	this.running = false;
@@ -55,8 +54,6 @@ TimeSlice.prototype.playPause = function(){
 	/*
 	 * this combines the start/stop/pause functions of Tock into one; simple
 	 */
-	
-  		this.pauseAlarm();
   		
   		if (this.running) {
   			this.running = false;  			
@@ -82,7 +79,7 @@ TimeSlice.prototype.reset = function(){
  };
      
 TimeSlice.prototype.playAlarm = function(){
-	if ($('#sound_on').val()=="checked"){
+	if (!$('#mute').is(':checked')){
 		this.alarmAudio.play();
 	};
 };
@@ -93,8 +90,7 @@ TimeSlice.prototype.pauseAlarm = function(){
 	
 TimeSlice.prototype.work = function(){
 	this.start($('#box_duration').val());
-	this.onShortBreak = true;
-	
+	this.onShortBreak = true;	
 };
 
 TimeSlice.prototype.shortBreak = function(){
@@ -152,13 +148,23 @@ var MySlice = new TimeSlice(AUDIO_FILE, {
 });
 
 	// temporary method of handling buttons.
-  $('#start_box').on('click', function () {
+	$('#start_button').on('click', function () {
   		MySlice.playPause();
     });
     
-    $('#reset_box').on('click', function () {
+	$('#reset_button').on('click', function () {
 		MySlice.reset();       
     });
-      
+    
+    $('#mute_button').on('click', function () {
+    	if($('#mute').is(':checked')){    		
+      		$('#mute').prop('checked', false);
+      	}
+      	else{
+      		$('#mute').prop('checked', true);
+      		MySlice.pauseAlarm();      		
+      	}
+     
+    });
    
 };
