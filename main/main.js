@@ -31,9 +31,9 @@ window.onload = function() {
     	
 	Tock.call(this, options);
 	
+	this.sliceCount = 0;
 	this.shortBreakCount = 0;
 	this.running = false;
-	this.iterations = 4;
 	this.onShortBreak = true;
 	this.onLongBreak = false;
 	this.alarmAudio = new Audio(audioFile);
@@ -116,7 +116,7 @@ TimeSlice.prototype.proceed = function(){
 	 * Most of the logic is stored here for now
 	 */
 	
-	if (this.sliceCount >= this.iterations){
+	if (this.sliceCount >= $('#box_iter').val()){
 			this.onLongBreak = true;
 			this.onShortBreak = false;
 		}
