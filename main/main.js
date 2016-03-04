@@ -17,8 +17,8 @@ window.onload = function() {
 	 */
 	
 	// temporary style code
-	document.getElementById("timeBoxes").style.border="1px solid gray";
-	document.getElementById("breaks").style.border="1px solid gray";
+	document.getElementById("timeBoxes").style.border="1px solid black";
+	document.getElementById("breaks").style.border="1px solid black";
 	document.getElementById("timeBoxes").style.padding="2px";
 	document.getElementById("breaks").style.padding="2px";
 	   
@@ -31,7 +31,7 @@ window.onload = function() {
     	
 	Tock.call(this, options);	
 	this.sliceCount = 0;
-	this.shortBreakCount = 0;
+	this.breakCount = 0;
 	this.running = false;
 	this.onShortBreak = true;
 	this.onLongBreak = false;
@@ -57,11 +57,11 @@ TimeSlice.prototype.playPause = function(){
   		
   		if (this.running) {
   			this.running = false;  			
-  			MySlice.stop($('#time_left').val());        	
+  			this.stop($('#time_left').val());        	
         }
         else {
         	this.running = true; 		
-			MySlice.start($('#time_left').val());
+			this.start($('#time_left').val());
         }
 };
  
@@ -69,11 +69,13 @@ TimeSlice.prototype.reset = function(){
 	/*
 	 * Replaces Tock's function with behavior more appropriate to slice
 	 */
+        this.stop();
 	    this.running = false;
-        MySlice.stop();
-        $('#time_left').val($('#box_duration').val());
+	    this.onLongBreak = false;
+	    this.onShortBreak = true;
         this.sliceCount = 0;
         this.breakCount = 0;
+        $('#time_left').val($('#box_duration').val());
         $('#timeBoxes').text(this.sliceCount);
         $('#breaks').text(this.breakCount);
  };
@@ -93,21 +95,16 @@ TimeSlice.prototype.work = function(){
 	this.onShortBreak = true;	
 };
 
-TimeSlice.prototype.shortBreak = function(){
-	this.sliceCount++;
-	this.shortBreakCount++;
+TimeSlice.prototype.shortBreak = function(){	
 	this.start($('#break_short').val());
 	this.onShortBreak = false;
 };
 
-TimeSlice.prototype.longBreak = function(){
-	this.shortBreakCount = 0;
-	this.sliceCount = 0;			
+TimeSlice.prototype.longBreak = function(){		
 	this.start($('#break_long').val());
-	this.onLongBreak = false;
 };
 
-TimeSlice.prototype.proceed = function(){
+TimeSlice.prototype.chooseMode = function(){
 	/*
 	 * Most of the logic is stored here for now
 	 */
@@ -118,18 +115,19 @@ TimeSlice.prototype.proceed = function(){
 		}
 		
 	if (this.onShortBreak){
+		this.sliceCount++;
 		this.shortBreak();
 	}
 	else if (this.onLongBreak){
 		this.longBreak();
 	}
 	else{
+		this.breakCount++;		
 		this.work();
 	}
-	
-    	
+	    	
 	$('#timeBoxes').text(this.sliceCount);
-    $('#breaks').text(this.shortBreakCount);
+    $('#breaks').text(this.breakCount);
 };
    
 var AUDIO_FILE = "media/cuckoo.mp3";
@@ -142,8 +140,13 @@ var MySlice = new TimeSlice(AUDIO_FILE, {
     },
     complete: function () {
         console.log('end');
-        MySlice.playAlarm();         
-		MySlice.proceed();            
+        MySlice.playAlarm(); 
+        if (MySlice.onLongBreak){
+        	MySlice.reset();  
+        	}
+        else{      
+			MySlice.chooseMode();
+		}            
     }
 });
 
