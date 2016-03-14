@@ -109,17 +109,21 @@ TimeSlice.prototype.chooseMode = function(){
 	 * Most of the logic is stored here for now
 	 */
 	
-	if (this.sliceCount >= $('#box_iter').val()){
-			this.onLongBreak = true;
-			this.onShortBreak = false;
-		}
+
 		
 	if (this.onShortBreak){
 		this.sliceCount++;
+		if (this.sliceCount >= $('#box_iter').val()){			
+			this.onShortBreak = false;
+			this.onLongBreak = true;
+			this.longBreak();
+		}
+		else {
 		this.shortBreak();
+		}
 	}
 	else if (this.onLongBreak){
-		this.longBreak();
+		this.reset();
 	}
 	else{
 		this.breakCount++;		
