@@ -3,9 +3,7 @@
  * Allows basic "timebox" time management for increased productivity. 
  * Licensed under GPL.
  * https://gnu.org/licenses/gpl-3.0.txt
- * Cuckoo Sound Effect by MorgantJ under a Creative Commons License
- * http://creativecommons.org/licenses/by/3.0/legalcode
- * http://freesound.org/people/morgantj/sounds/58628/
+ * 
  * Tock provided by Mr Chimp under the MIT License
  */
 
@@ -13,14 +11,11 @@
 
 window.onload = function() {
 	/*
-	 * This is our main function.
+	 * This is our main function. We might want to break this up eventually
 	 */
 	
 	// temporary style code
-	document.getElementById("timeBoxes").style.border="1px solid black";
-	document.getElementById("breaks").style.border="1px solid black";
-	document.getElementById("timeBoxes").style.padding="2px";
-	document.getElementById("breaks").style.padding="2px";
+
 	   
     function TimeSlice (audioFile, options) {
     /*
@@ -36,6 +31,15 @@ window.onload = function() {
 	this.onShortBreak = true;
 	this.onLongBreak = false;
 	this.alarmAudio = new Audio(audioFile);
+	this.shortBreakTime = '5:00';
+	this.longBreakTime = '20:00';
+	this.sliceTimeLeft='25:00';
+	this.sliceDuration='25:00';
+	this.sliceLimit=4;
+	this.reset();
+	$('#sliceDuration').html(this.sliceDuration);
+	$('#breakLong').html(this.longBreakTime);
+	$('#breakShort').html(this.shortBreakTime);
 	
 };
 
@@ -57,11 +61,11 @@ TimeSlice.prototype.playPause = function(){
   		
   		if (this.running) {
   			this.running = false;  			
-  			this.stop($('#time_left').val());        	
+  			this.stop($('#timeLeft').text());        	
         }
         else {
         	this.running = true; 		
-			this.start($('#time_left').val());
+			this.start($('#timeLeft').text());
         }
 };
  
@@ -75,9 +79,11 @@ TimeSlice.prototype.reset = function(){
 	    this.onShortBreak = true;
         this.sliceCount = 0;
         this.breakCount = 0;
-        $('#time_left').val($('#box_duration').val());
-        $('#timeBoxes').text(this.sliceCount);
-        $('#breaks').text(this.breakCount);
+		
+		$('#timeLeft').html(this.sliceTimeLeft);
+		$('#timeSlices').html(this.sliceCount);
+
+        $('#breaks').html(this.breakCount);
  };
      
 TimeSlice.prototype.playAlarm = function(){
@@ -91,29 +97,26 @@ TimeSlice.prototype.pauseAlarm = function(){
 	};
 	
 TimeSlice.prototype.work = function(){
-	this.start($('#box_duration').val());
+	this.start(this.sliceTimeLeft);
 	this.onShortBreak = true;	
 };
 
 TimeSlice.prototype.shortBreak = function(){	
-	this.start($('#break_short').val());
+	this.start(this.shortBreakTime);
 	this.onShortBreak = false;
 };
 
 TimeSlice.prototype.longBreak = function(){		
-	this.start($('#break_long').val());
+	this.start(this.longBreakTime);
 };
 
 TimeSlice.prototype.chooseMode = function(){
 	/*
 	 * Most of the logic is stored here for now
 	 */
-	
-
-		
 	if (this.onShortBreak){
 		this.sliceCount++;
-		if (this.sliceCount >= $('#box_iter').val()){			
+		if (this.sliceCount >= this.sliceLimit){			
 			this.onShortBreak = false;
 			this.onLongBreak = true;
 			this.longBreak();
@@ -130,17 +133,17 @@ TimeSlice.prototype.chooseMode = function(){
 		this.work();
 	}
 	    	
-	$('#timeBoxes').text(this.sliceCount);
+	$('#timeSlices').text(this.sliceCount);
     $('#breaks').text(this.breakCount);
 };
    
-var AUDIO_FILE = "media/cuckoo.mp3";
+var AUDIO_FILE = "media/chime.wav";
 
 var MySlice = new TimeSlice(AUDIO_FILE, {
     countdown: true,
     interval: 250,
     callback: function () {    	
-    	$('#time_left').val(MySlice.msToTime(MySlice.lap()));
+    	$('#timeLeft').html(MySlice.msToTime(MySlice.lap()));
     },
     complete: function () {
         console.log('end');
@@ -155,15 +158,15 @@ var MySlice = new TimeSlice(AUDIO_FILE, {
 });
 
 	// temporary method of handling buttons.
-	$('#start_button').on('click', function () {
+	$('#startButton').on('click', function () {
   		MySlice.playPause();
     });
     
-	$('#reset_button').on('click', function () {
+	$('#resetButton').on('click', function () {
 		MySlice.reset();       
     });
     
-    $('#mute_button').on('click', function () {
+    $('#muteButton').on('click', function () {
     	if($('#mute').is(':checked')){    		
       		$('#mute').prop('checked', false);
       	}
@@ -173,5 +176,4 @@ var MySlice = new TimeSlice(AUDIO_FILE, {
       	}
      
     });
-   
 };

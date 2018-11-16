@@ -1,32 +1,42 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+    <meta charset="UTF-8"> 
 <head>
     <title>TimeSlice</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script src="tock/tock.js"></script>
     <script src="main/main.js">
     </script>
+    <link rel="stylesheet" href="style/main.css" type="text/css">
 </head>
 <body>
-     <section>
-     <h2>TimeSlice</h2><p>
-     	<span>
-     		Note: Must enter times in MM:SS format.<br>
-     		TimeSlice will stop after completing the number of slices, three short breaks, and one long break.
-     	</span><br><br>
-     		<span>Time Left:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input size="8" maxlength="6" id="time_left" placeholder="00:00" value="25:00">
-     		 <span>Slices:&nbsp;</span><span id="timeBoxes" style="background-color:#EEEEEE">0</span>&nbsp;&nbsp;&nbsp;
-     		<span>Breaks:&nbsp;</span><span id="breaks" style="background-color:#EEEEEE">0</span>
-     		<br><span>Slice Duration:</span><input size="8" maxlength="6" id="box_duration" value="25:00">
-     		<span>No. of Slices:</span>&nbsp;<input size="8" maxlength="6" id="box_iter" value="4">
-     		<br><span>Short Break:&nbsp;&nbsp;&nbsp;</span><input size="8" maxlength="6" id="break_short" value="5:00">
-     		<span>Long Break:</span>&nbsp;&nbsp;<input size="8" maxlength="6" id="break_long" value="30:00">
-     		</p>
-          <p>
-               <button id="start_button">Play/Pause</button>
-               <button id="reset_button">Reset</button>
-               <button id="mute_button">Mute</button><input type="radio" id="mute">
-          </p>              
+     <section id="main">
+     <h2>TimeSlice</h2>
+
+            <div class="row">
+                <label>Time Left</label><span class="boxes" id="timeLeft">25:00</span>
+            </div>
+            <div class="row">
+                <label>Slices</label><span class="boxes" id="timeSlices">0</span>
+                <label>Breaks</label><span class="boxes" id="breaks">0</span>
+            </div>
+            <div class="row">
+                <label>Slice Duration</label><span class="boxes" id="sliceDuration">25:00</span>
+            </div>
+            <div class="row">
+                <label>Number of Slices</label><span class="boxes" id="boxNum">4</span>
+            </div>
+            <div class="row">
+                <label>Short Break</label><span class="boxes" id="breakShort">5:00</span>
+            </div>
+            <div class="row">
+                <label>Long Break</label><span class="boxes" id="breakLong">20:00
+            </div>
+            <div class="row">
+               <button id="startButton">Play/Pause</button>
+               <button id="resetButton">Reset</button>
+               <button id="muteButton">Mute</button><input type="radio" id="mute">
+          </div>              
     </section>
 </body>
 </html>

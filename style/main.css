@@ -1,0 +1,28 @@
+
+body {
+	background-color: #FFFFFF;
+	width: 960px;
+	margin: 0;
+}
+
+.row {
+    margin: 4px;
+    padding: 5px;
+    width: 300px;
+}
+
+#main{
+    margin: 5px;
+    margin-left: 20px;
+    padding: 5px;
+}
+
+label{
+    padding: 5px;
+}
+
+.boxes{
+    padding: 2px;
+    background-color:#EEEEEE;
+    border:2px solid #000;
+}
